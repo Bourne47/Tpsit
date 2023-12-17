@@ -27,15 +27,16 @@ void chiediAnno (int *anno){
 }
 
 void stampaFilmAnno(int anno, film array_film[], int c){
-    for (int cont = 0; cont < c; cont++) {
-        if (array_film[cont].anno == anno)
-            printf("%d %s %s %d %s\n", array_film[cont].numero, array_film[cont].titolo, array_film[cont].genere, array_film[cont].anno, array_film[cont].disponibilita);
+    for (film *cont = array_film; cont < array_film+c; cont++) {
+        //if (array_film[cont].anno == anno)
+        if (cont->anno == anno)
+            printf("%d %s %s %d %s\n", cont->numero, cont->titolo, cont->genere, cont->anno, cont->disponibilita);
     }
 }
 
 void stampaTutto(film array_film[], int c){
-    for (int cont = 0; cont < c; cont++) {
-        printf("%d %s %s %d %s\n", array_film[cont].numero, array_film[cont].titolo, array_film[cont].genere, array_film[cont].anno, array_film[cont].disponibilita);
+    for (film *cont = array_film; cont < array_film+c; cont++) {
+        printf("%d %s %s %d %s\n", cont->numero, cont->titolo, cont->genere, cont->anno, cont->disponibilita);
     }
 }
 
@@ -45,8 +46,9 @@ int main () {
     FILE *fp;
     char *campo;
     film array_film[NUM_RIGHE];
-    int c = 0;
+    film *c = array_film;
     int anno;
+    int cont = 0;
 
     fp = fopen(filename, "r");
     if (fp == NULL) {
@@ -55,19 +57,21 @@ int main () {
     }
     while(fgets(riga, DIM_RIGA, fp)) {
         campo = strtok(riga, ",");
-        array_film[c].numero = atoi(campo);//converte in intero atof converte in float
+        //(*(array_film + c)).numero = atoi(campo);//altra versione
+        c->numero = atoi(campo);//converte in intero atof converte in float
         campo = strtok(NULL, ",");//null perché strtok si ricorda la riga
-        array_film[c].titolo = strdup(campo);
+        c->titolo = strdup(campo);
         campo = strtok(NULL, ",");
-        array_film[c].genere = strdup(campo);
+        c->genere = strdup(campo);
         campo = strtok(NULL, ",");
-        array_film[c].anno = atoi(campo);
+        c->anno = atoi(campo);
         campo = strtok(NULL, ",");
-        array_film[c].disponibilita = strdup(campo);
+        c->disponibilita = strdup(campo);
         c++;
+        cont++;
     }
     chiediAnno(&anno);
-    stampaFilmAnno(anno, array_film, c);
+    stampaFilmAnno(anno, array_film, cont);
     
     return 0;
 }

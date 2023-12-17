@@ -12,8 +12,8 @@ es. 1
 
 int calcolaSomma (int vett[], int num){
     int somma = 0;
-    for (int c = 0; c < num; c++){
-        somma += *(vett + c);
+    for (int *c = vett; c < vett+num; c++){
+        somma += *c;
     }
     return somma;
 }
